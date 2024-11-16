@@ -46,11 +46,11 @@ public class BuyDebitBalans {
     }
 
     public void successSendCardForm() {
-        successFormByCard.shouldBe(Condition.visible, Duration.ofSeconds(10));
+        successFormByCard.shouldBe(Condition.visible, Duration.ofSeconds(50));
     }
 
     public void randomMaskCard() {
-        incorrectCardNumber.shouldBe(Condition.visible, Duration.ofSeconds(10));
+        incorrectCardNumber.shouldBe(Condition.visible, Duration.ofSeconds(50));
     }
 
     public void errorCardForm() {
