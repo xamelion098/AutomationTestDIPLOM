@@ -166,7 +166,55 @@ public class PaymentGateTest {
 
 
     }
+    @Test
+    public void nullCardTest() {
+        open("http://localhost:8080/");
+        var cardInfo = new DataHelper.CardInfo(null, getValidMonth(), getValidYear(), validName(), getValidCodeCVV());
+        var mainPage = new MainPage();
+        var buyDebitBalans = mainPage.payByCard();
+        buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
+        buyDebitBalans.errorMaskCard();
 
+    }
+    @Test
+    public void nullMonthTest() {
+        open("http://localhost:8080/");
+        var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), null, getValidYear(), validName(), getValidCodeCVV());
+        var mainPage = new MainPage();
+        var buyDebitBalans = mainPage.payByCard();
+        buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
+        buyDebitBalans.emptyMonth();
+    }
+    @Test
+    public void nullYearTest() {
+        open("http://localhost:8080/");
+        var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getValidMonth(), null, validName(), getValidCodeCVV());
+        var mainPage = new MainPage();
+        var buyDebitBalans = mainPage.payByCard();
+        buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
+        buyDebitBalans.emptyYear();
+
+    }
+    @Test
+    public void nullNameTest() {
+        open("http://localhost:8080/");
+        var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getValidMonth(), getValidYear(), null, getValidCodeCVV());
+        var mainPage = new MainPage();
+        var buyDebitBalans = mainPage.payByCard();
+        buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
+        buyDebitBalans.emptyOwner();
+
+    }
+    @Test
+    public void nullCVVTest() {
+        open("http://localhost:8080/");
+        var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getValidMonth(), getValidYear(), validName(), null);
+        var mainPage = new MainPage();
+        var buyDebitBalans = mainPage.payByCard();
+        buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
+        buyDebitBalans.emptyCVV();
+
+    }
 }
 
 

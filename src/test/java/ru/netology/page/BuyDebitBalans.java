@@ -54,7 +54,7 @@ public class BuyDebitBalans {
 
     public void randomMaskCard() {
 
-        incorrectCardNumber.shouldBe(visible, Duration.ofSeconds(50))
+        incorrectCardNumber.shouldBe(visible, Duration.ofSeconds(20))
                 .should(exactText("Ошибка! Банк отказал в проведении операции."));
     }
 
@@ -65,6 +65,27 @@ public class BuyDebitBalans {
         emptyYear.shouldBe(visible);
         emptyName.shouldBe(visible);
         emptyCvv.shouldBe(visible);
+    }
+
+    public void emptyMonth() {
+        emptyCard.shouldBe(visible)
+                .should(text("Неверный формат"));
+    }
+
+    public void emptyYear() {
+        emptyYear.shouldBe(visible)
+                .should(text("Неверный формат"));
+
+    }
+
+    public void emptyOwner() {
+        emptyName.shouldBe(visible)
+                .should(text("Поле обязательно для заполнения"));
+    }
+
+    public void emptyCVV() {
+        emptyCvv.shouldBe(visible)
+                .should(text("Неверный формат"));
     }
 
     public void errorMaskCard() {
