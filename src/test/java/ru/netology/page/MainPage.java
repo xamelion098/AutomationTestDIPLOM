@@ -12,18 +12,15 @@ public class MainPage {
     private final SelenideElement paymentButton = $$(".button__content")
             .find(exactText("Купить"));
     private final SelenideElement creditButton = $(byText("Купить в кредит"));
-    private final SelenideElement paymentByCard = $(byText("Оплата по карте"));
-    private final SelenideElement paymentByCredit = $(byText("Кредит по данным карты"));
+
+
 
     public BuyDebitBalans payByCard() {
         paymentButton.click();
-        paymentByCard.shouldBe(visible);
         return new BuyDebitBalans();
     }
-
     public BuyCreditBalans payByCredit() {
         creditButton.click();
-        paymentByCredit.shouldBe(visible);
         return new BuyCreditBalans();
     }
 

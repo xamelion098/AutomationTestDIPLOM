@@ -3,7 +3,6 @@ package ru.netology.page;
 import com.codeborne.selenide.Condition;
 
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
 import ru.netology.data.DataHelper;
 
 import java.time.Duration;
@@ -14,6 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class BuyDebitBalans {
+    private final SelenideElement paymentByCard = $(byText("Оплата по карте"));
     private final SelenideElement cardNumber = $("[placeholder='0000 0000 0000 0000']");
     private final SelenideElement month = $("[placeholder='08']");
     private final SelenideElement years = $("[placeholder='22']");
@@ -24,19 +24,20 @@ public class BuyDebitBalans {
             .find(Condition.exactText("Продолжить"));
     private final SelenideElement successFormByCard = $$(".notification__content")
             .find(exactText("Операция одобрена Банком."));
-    private final SelenideElement incorrectCardNumber = $(By.xpath("//*[@id=\"root\"]/div/div[3]/div[3]"));
+    private final SelenideElement incorrectCardNumber = $$(".notification__content")
+            .find(exactText("Ошибка! Банк отказал в проведении операции."));
 
 
-    private final SelenideElement emptyCard = $(By.xpath("//*[@id=\"root\"]/div/form/fieldset/div[1]/span/span/span[3]"));
-    private final SelenideElement emptyMonth = $(By.xpath("//*[@id=\"root\"]/div/form/fieldset/div[2]/span/span[1]/span/span/span[3]"));
-    private final SelenideElement incorrectMouth = $(By.xpath("//*[@id=\"root\"]/div/form/fieldset/div[2]/span/span[1]/span/span/span[3]"));
-    private final SelenideElement emptyYear = $(By.xpath("//*[@id=\"root\"]/div/form/fieldset/div[2]/span/span[2]/span/span/span[3]"));
-    private final SelenideElement incorrectYear = $(byXpath("//*[@id=\"root\"]/div/form/fieldset/div[2]/span/span[2]/span/span/span[3]"));
-    private final SelenideElement emptyName = $(By.xpath("//*[@id=\"root\"]/div/form/fieldset/div[3]/span/span[1]/span/span/span[3]"));
-    private final SelenideElement emptyCvv = $(byXpath("//*[@id=\"root\"]/div/form/fieldset/div[3]/span/span[2]/span/span/span[3]"));
+    private final SelenideElement emptyCard = $$(".input__inner").findBy(text("Неверный формат"));
+    private final SelenideElement emptyMonth = $$(".input__inner").findBy(text("Неверный формат"));
+    private final SelenideElement incorrectMouth = $$(".input__sub").findBy(text("Неверно указан срок действия карты"));
+    private final SelenideElement emptyYear = $$(".input__inner").findBy(text("Неверный формат"));
+    private final SelenideElement incorrectYear = $$(".input__sub").findBy(text("Истёк срок действия карты"));
+    private final SelenideElement emptyName = $$(".input__sub").findBy(text("Поле обязательно для заполнения"));
+    private final SelenideElement emptyCvv = $$(".input__inner").findBy(text("Неверный формат"));
 
     public void fullApprovedCorrectCardForm(DataHelper.CardInfo cardInfo) {
-
+        paymentByCard.click();
         cardNumber.setValue(cardInfo.getCardNumber());
         month.setValue(cardInfo.getMonth());
         years.setValue(cardInfo.getYears());
@@ -46,11 +47,15 @@ public class BuyDebitBalans {
     }
 
     public void successSendCardForm() {
-        successFormByCard.shouldBe(Condition.visible, Duration.ofSeconds(50));
+
+        successFormByCard.shouldBe(visible, Duration.ofSeconds(50))
+                .should(exactText("Операция одобрена Банком."));
     }
 
     public void randomMaskCard() {
-        incorrectCardNumber.shouldBe(Condition.visible, Duration.ofSeconds(50));
+
+        incorrectCardNumber.shouldBe(visible, Duration.ofSeconds(50))
+                .should(exactText("Ошибка! Банк отказал в проведении операции."));
     }
 
     public void errorCardForm() {
@@ -63,24 +68,30 @@ public class BuyDebitBalans {
     }
 
     public void errorMaskCard() {
-        emptyCard.shouldBe(visible);
+        emptyCard.shouldBe(visible)
+                .should(text("Неверный формат"));
 
     }
 
     public void errorMonth() {
-        incorrectMouth.shouldBe(visible);
+        incorrectMouth.shouldBe(visible)
+                .should(exactText("Неверно указан срок действия карты"));
     }
 
     public void errorYears() {
-        incorrectYear.shouldBe(visible);
+        incorrectYear.shouldBe(visible)
+                .should(exactText("Истёк срок действия карты"));
     }
 
     public void errorName() {
-        emptyName.shouldBe(visible);
+
+        emptyName.shouldBe(visible)
+                .should(text("Поле обязательно для заполнения"));
     }
 
     public void errorCvv() {
-        emptyCvv.shouldBe(visible);
+        emptyCvv.shouldBe(visible)
+                .should(text("Неверный формат"));
     }
 
 

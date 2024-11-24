@@ -1,16 +1,20 @@
-package  ru.netology.test;
+package ru.netology.test;
 
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
+import lombok.val;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
+import ru.netology.data.SQLHelper;
 import ru.netology.page.MainPage;
 
 import static com.codeborne.selenide.Selenide.open;
-import static ru.netology.data.DataHelper.CardInfo.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static ru.netology.data.DataHelper.*;
+
 
 public class PaymentGateTest {
     @BeforeAll
@@ -23,12 +27,9 @@ public class PaymentGateTest {
         SelenideLogger.removeListener("allure");
     }
 
-
-    @Test
-    public void successMainTest() {
-        open("http://localhost:8080/");
-        var mainPage = new MainPage();
-        mainPage.payByCard();
+    @BeforeAll
+    public static void shouldCleanBase() {
+        SQLHelper.cleanBase();
     }
 
     @Test
@@ -48,7 +49,27 @@ public class PaymentGateTest {
         var mainPage = new MainPage();
         var buyDebitBalans = mainPage.payByCard();
         buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
-        buyDebitBalans.successSendCardForm();
+        buyDebitBalans.randomMaskCard();
+    }
+
+    @Test
+    public void SQLApprovedWithApprovedCardTest() {
+        val cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getValidMonth(), getValidYear(), validName(), getValidCodeCVV());
+        val mainPage = new MainPage();
+        val BuyDebitBalans = mainPage.payByCard();
+        BuyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
+        BuyDebitBalans.successSendCardForm();
+        assertEquals("APPROVED", SQLHelper.getCardPayment());
+    }
+
+    @Test
+    public void SQLDeclinedWithDeclinedCardTest() {
+        val cardInfo = new DataHelper.CardInfo(getDECLINEDCardNumber(), getValidMonth(), getValidYear(), validName(), getValidCodeCVV());
+        val mainPage = new MainPage();
+        val BuyDebitBalans = mainPage.payByCard();
+        BuyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
+        BuyDebitBalans.successSendCardForm();
+        assertEquals("DECLINED", SQLHelper.getCardPayment());
     }
 
 
@@ -62,8 +83,9 @@ public class PaymentGateTest {
         buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
         buyDebitBalans.randomMaskCard();
     }
+
     @Test
-    void incorrectMaskCardTest(){
+    void incorrectMaskCardTest() {
         open("http://localhost:8080/");
         var cardInfo = new DataHelper.CardInfo(getInValidShortMaskCard(), getValidMonth(), getValidYear(), validName(), getValidCodeCVV());
         var mainPage = new MainPage();
@@ -71,8 +93,9 @@ public class PaymentGateTest {
         buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
         buyDebitBalans.errorMaskCard();
     }
+
     @Test
-    void incorrectMonthTest(){
+    void incorrectMonthTest() {
         open("http://localhost:8080/");
         var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getInValidMonth(), getValidYear(), validName(), getValidCodeCVV());
         var mainPage = new MainPage();
@@ -80,8 +103,9 @@ public class PaymentGateTest {
         buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
         buyDebitBalans.errorMonth();
     }
+
     @Test
-    void incorrectYeasTest(){
+    void incorrectYeasTest() {
         open("http://localhost:8080/");
         var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getValidMonth(), getInValidYear(), validName(), getValidCodeCVV());
         var mainPage = new MainPage();
@@ -89,8 +113,9 @@ public class PaymentGateTest {
         buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
         buyDebitBalans.errorYears();
     }
+
     @Test
-    void incorrectNameRUENTest(){
+    void incorrectNameRUENTest() {
         open("http://localhost:8080/");
         var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getValidMonth(), getValidYear(), invalidNameRUEN(), getValidCodeCVV());
         var mainPage = new MainPage();
@@ -98,8 +123,9 @@ public class PaymentGateTest {
         buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
         buyDebitBalans.errorName();
     }
+
     @Test
-    void incorrectLongNameTest(){
+    void incorrectLongNameTest() {
         open("http://localhost:8080/");
         var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getValidMonth(), getValidYear(), invalidLongName(), getValidCodeCVV());
         var mainPage = new MainPage();
@@ -107,8 +133,9 @@ public class PaymentGateTest {
         buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
         buyDebitBalans.errorName();
     }
+
     @Test
-    void incorrectNameNumberTest(){
+    void incorrectNameNumberTest() {
         open("http://localhost:8080/");
         var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getValidMonth(), getValidYear(), invalidNameNumber(), getValidCodeCVV());
         var mainPage = new MainPage();
@@ -116,8 +143,9 @@ public class PaymentGateTest {
         buyDebitBalans.fullApprovedCorrectCardForm(cardInfo);
         buyDebitBalans.errorName();
     }
+
     @Test
-    void incorrectCvvCodeTest(){
+    void incorrectCvvCodeTest() {
         open("http://localhost:8080/");
         var cardInfo = new DataHelper.CardInfo(getAPPROVEDCardNumber(), getValidMonth(), getValidYear(), validName(), getInValidCodeCVV());
         var mainPage = new MainPage();
@@ -128,7 +156,7 @@ public class PaymentGateTest {
 
 
     @Test
-    public  void nullInfoAllTest() {
+    public void nullInfoAllTest() {
         open("http://localhost:8080/");
         var cardInfo = new DataHelper.CardInfo(null, null, null, null, null);
         var mainPage = new MainPage();
@@ -138,7 +166,9 @@ public class PaymentGateTest {
 
 
     }
+
 }
+
 
 
 
