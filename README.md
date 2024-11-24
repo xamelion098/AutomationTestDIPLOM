@@ -8,6 +8,9 @@
 
 # Ссылки на тестувую документацию :
 
-Plan : https://github.com/xamelion098/AutomationTestDIPLOM/blob/master/docs/Plan.md
-Report : https://github.com/xamelion098/AutomationTestDIPLOM/blob/master/docs/Report.md
-Summary : https://github.com/xamelion098/AutomationTestDIPLOM/blob/master/docs/Summary.md
+Plan : https://github.com/xamelion098/AutomationTestDIPLOM/blob/master/docs/Plan.md  
+
+Report : https://github.com/xamelion098/AutomationTestDIPLOM/blob/master/docs/Report.md  
+
+Summary : https://github.com/xamelion098/AutomationTestDIPLOM/blob/master/docs/Summary.md  
+
