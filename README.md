@@ -5,3 +5,9 @@
 ## 4.Далее в новой вкладке консоли нужно ввести команду "java -jar ./artifacts/aqa-shop.jar."
 ## 5.После того как SUT будет поднят - можно перейти в класс PaymentGateTest и произвести запуск теста. 
 ## 6.Сгенерировать отчёт по итогам тестирования с помощью Allure, который автоматически откроется в браузере с помощью команды в терминале   ./gradlew allureServe
+
+# Ссылки на тестувую документацию :
+
+Plan : https://github.com/xamelion098/AutomationTestDIPLOM/blob/master/docs/Plan.md
+Report : https://github.com/xamelion098/AutomationTestDIPLOM/blob/master/docs/Report.md
+Summary : https://github.com/xamelion098/AutomationTestDIPLOM/blob/master/docs/Summary.md
